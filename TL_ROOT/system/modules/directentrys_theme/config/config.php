@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php if(!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 /**
  * Contao Open Source CMS
@@ -21,11 +21,9 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  © Dominik Zogg 2011
- * @author     Dominik Zogg
- * @package    directentrys_theme
- * @license    LGPLv3
- * @filesource
+ * @copyright  Dominik Zogg 2011
+ * @author     Dominik Zogg <dominik.zogg@gmail.com>
+ * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
 
 $GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('DirectEntries','inject');
