@@ -133,7 +133,7 @@ class DirectEntries extends Backend
             $objPages = $this->Database->query("SELECT id,title FROM tl_page WHERE type = 'root' ORDER BY title");
 
             // if there is at minimum one page
-            if($objPages->numRows)
+            if($objPages->numRows > 1)
             {
                 // prepare array return
                 $arrReturn = array();
