@@ -96,7 +96,8 @@ class DirectEntries extends Backend
                 {
                     // set the theme url and title
                     $arrReturn[$intCounter]['name']['url'] = 'contao/main.php?do=themes&act=edit&id=' . $objThemes->id;
-                    $arrReturn[$intCounter]['name']['title'] = strlen($objThemes->name) > 10 ? substr($objThemes->name, 0, 8) . '...' : $objThemes->name;
+                    $arrReturn[$intCounter]['name']['title'] = $objThemes->name;
+                    $arrReturn[$intCounter]['name']['link'] = strlen($objThemes->name) > 10 ? substr($objThemes->name, 0, 8) . '...' : $objThemes->name;
 
                     // foreach icons
                     foreach($arrIcons as $strIcon => $strTableName)
@@ -107,6 +108,7 @@ class DirectEntries extends Backend
                             // set the icon url and title
                             $arrReturn[$intCounter]['icons'][$strIcon]['url'] = 'contao/main.php?do=themes&id=' . $objThemes->id . '&table=' . $strTableName;
                             $arrReturn[$intCounter]['icons'][$strIcon]['title'] = $strIcon;
+                            $arrReturn[$intCounter]['icons'][$strIcon]['icon'] = $strIcon;
                         }
                     }
                     // add one to counter
@@ -147,10 +149,12 @@ class DirectEntries extends Backend
                     // set the icon url and title
                     $arrReturn[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=page&node=' . $objPages->id;
                     $arrReturn[$intCounter]['icons']['page']['title'] = 'page';
+                    $arrReturn[$intCounter]['icons']['page']['icon'] = 'page';
 
                     // set the page url and title
                     $arrReturn[$intCounter]['name']['url'] = 'contao/main.php?do=page&node=' . $objPages->id;
-                    $arrReturn[$intCounter]['name']['title'] = strlen($objPages->title) > 17 ? substr($objPages->title, 0, 15) . '...' : $objPages->title;
+                    $arrReturn[$intCounter]['name']['title'] = $objPages->title;
+                    $arrReturn[$intCounter]['name']['link'] = strlen($objPages->title) > 17 ? substr($objPages->title, 0, 15) . '...' : $objPages->title;
 
                     // add one to counter
                     $intCounter++;
@@ -193,7 +197,7 @@ class DirectEntries extends Backend
                     {
                         // add icon link
                         $strHtml .= '<a style="padding-right: 2px;" title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '">';
-                        $strHtml .= '<img style="margin:0; padding: 0; width: 16px; height: 16px;" src="system/themes/default/images/' . $arrTitleAndUrl['title'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
+                        $strHtml .= '<img style="margin:0; padding: 0; width: 16px; height: 16px;" src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
                         $strHtml .= '</a>';
                     }
                 }
@@ -203,7 +207,7 @@ class DirectEntries extends Backend
                 {
                     // add name link
                     $strHtml .= '<a title="' . $arrListElement['name']['title'] . '" href="' . $arrListElement['name']['url'] . '">';
-                    $strHtml .= $arrListElement['name']['title'];
+                    $strHtml .= $arrListElement['name']['link'];
                     $strHtml .= '</a>';
                 }
 
