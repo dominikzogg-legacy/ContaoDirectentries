@@ -150,7 +150,7 @@ class DirectEntries extends Backend
 
                     // set the page url and title
                     $arrReturn[$intCounter]['name']['url'] = 'contao/main.php?do=page&node=' . $objPages->id;
-                    $arrReturn[$intCounter]['name']['title'] = strlen($objPages->title) > 15 ? substr($objPages->title, 0, 13) . '...' : $objPages->title;
+                    $arrReturn[$intCounter]['name']['title'] = strlen($objPages->title) > 17 ? substr($objPages->title, 0, 15) . '...' : $objPages->title;
 
                     // add one to counter
                     $intCounter++;
