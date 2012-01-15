@@ -28,4 +28,4 @@
  * @filesource
  */
 
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('DirectEntrysTheme','injectThemes');
+$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('DirectEntries','inject');
