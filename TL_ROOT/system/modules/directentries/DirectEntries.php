@@ -132,19 +132,19 @@ class DirectEntries extends Backend
         if($this->User->isAdmin || $this->User->hasAccess('page', 'modules'))
         {
             // get all existing root pages
-            $objPages = $this->Database->query("SELECT id,title FROM tl_page WHERE type = 'root' ORDER BY title");
+            $objPages = $this->Database->query("SELECT * FROM tl_page WHERE type = 'root' ORDER BY title");
 
-            // if there is at minimum one page
-            if($objPages->numRows > 1)
+            // prepare array return
+            $arrReturn = array();
+
+            // set counter
+            $intCounter = 1;
+
+            // do this foreach page
+            while($objPages->next())
             {
-                // prepare array return
-                $arrReturn = array();
-
-                // set counter
-                $intCounter = 1;
-
-                // do this foreach page
-                while($objPages->next())
+                // check page permission
+                if($this->User->isAdmin || $this->User->isAllowed(1, $objPages->row()))
                 {
                     // set the icon url and title
                     $arrReturn[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=page&node=' . $objPages->id;
@@ -159,6 +159,10 @@ class DirectEntries extends Backend
                     // add one to counter
                     $intCounter++;
                 }
+            }
+            // show only if there is more than one page
+            if(count($arrReturn) > 1)
+            {
                 // return array
                 return($arrReturn);
             }
@@ -201,7 +205,6 @@ class DirectEntries extends Backend
                         $strHtml .= '</a>';
                     }
                 }
-
                 // check for name
                 if(isset($arrListElement['name']) && is_array($arrListElement['name']))
                 {
@@ -210,15 +213,12 @@ class DirectEntries extends Backend
                     $strHtml .= $arrListElement['name']['link'];
                     $strHtml .= '</a>';
                 }
-
                 // add list element close tag
                 $strHtml .= '</li>';
             }
-
             // add list close tag
             $strHtml .= '</ul>';
         }
-
         // return html
         return $strHtml;
     }
