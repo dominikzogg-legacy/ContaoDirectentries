@@ -39,6 +39,22 @@ class DirectEntries extends Backend
     }
 
     /**
+     * getDirectEntries
+     * @return array the directentries
+     */
+    public static function getDirectEntries()
+    {
+        return
+        (
+            array
+            (
+                'design_themes'  => &$GLOBALS['TL_LANG']['MOD']['themes'][0],
+                'design_page' => &$GLOBALS['TL_LANG']['MOD']['page'][0],
+            )
+        );
+    }
+
+    /**
      * inject
      * @param str $strContent rendered template
      * @param str $strTemplate template name
@@ -48,25 +64,41 @@ class DirectEntries extends Backend
     {
         if($strTemplate == 'be_main')
         {
-            // themes
-            $arrThemes = $this->_prepareThemeArray();
-            $strThemeHtml = $this->_buildHtml($arrThemes);
-            $strContent = $this->_addContent('design', 'themes', $strThemeHtml, $strContent);
+            // get config
+            $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
 
-            // pages
-            $arrPages = $this->_preparePageArray();
-            $strPageHtml = $this->_buildHtml($arrPages);
-            $strContent = $this->_addContent('design', 'page', $strPageHtml, $strContent);
+            // foreach backend navigation group
+            foreach(self::getDirectEntries() as $strGroupAndNavigationKey => $strNavigationName)
+            {
+                // check if disabled
+                if(!in_array($strGroupAndNavigationKey, $arrInactiveDirectEntries))
+                {
+                    // explode group and navigation key
+                    $arrGroupAndNavigationKey = explode('_', $strGroupAndNavigationKey);
+
+                    // build method name
+                    $strMethodName = '_prepare' . ucfirst($arrGroupAndNavigationKey[1]) . 'Array';
+
+                    // build array
+                    $arrNavigationElement = $this->$strMethodName();
+
+                    // build html
+                    $strNavigationElementHtml = $this->_buildHtml($arrNavigationElement);
+
+                    // add html to content
+                    $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $strNavigationElementHtml, $strContent);
+                }
+            }
         }
         // return rendered template
         return($strContent);
     }
 
     /**
-     * _prepareThemeArray
+     * _prepareThemesArray
      * @return boolean|array the theme array
      */
-    protected function _prepareThemeArray()
+    protected function _prepareThemesArray()
     {
         // check permission
         if($this->User->isAdmin || $this->User->hasAccess('themes', 'modules'))
@@ -233,7 +265,8 @@ class DirectEntries extends Backend
      */
     protected function _addContent($strToGroup, $strToElement, $strToAdd, $strContent)
     {
-        return(
+        return
+        (
             preg_replace
             (
                 '/(\<li.*?id="' . $strToGroup .'".*?\>[\S\s]*?\<ul.*?\>[\S\s]*?\<li.*?\>[\S\s]*?\<a.*?' . $strToElement . '[\S\s]*?\>.*?\<\/a\>)([\S\s]*?\<\/li\>[\S\s]*?\<\/ul\>[\S\s]*?\<\/li\>)/',
