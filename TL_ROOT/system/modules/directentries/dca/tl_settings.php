@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['t
 $GLOBALS['TL_DCA']['tl_settings']['fields']['inactiveDirectEntries'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_settings_directentries']['inactiveDirectEntries'],
-    'inputType'               => 'select',
+    'inputType'               => 'checkbox',
     'options_callback'        => array('DirectEntries', 'getDirectEntries'),
-    'eval'                    => array('multiple'=>true, 'chosen'=>true, 'tl_class'=>'w50')
+    'eval'                    => array('multiple'=>true)
 );
