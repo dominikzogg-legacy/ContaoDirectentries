@@ -74,6 +74,8 @@ class DirectEntries extends Backend
     {
         if($strTemplate == 'be_main')
         {
+            // start time tracking
+            $floatStartTime = microtime(true);
             // get config
             $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
 
@@ -99,6 +101,12 @@ class DirectEntries extends Backend
                     $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $strNavigationElementHtml, $strContent);
                 }
             }
+
+            // stop time tracking
+            $floatStopTime = microtime(true);
+
+            // check time
+            //die($floatStopTime - $floatStartTime);
         }
         // return rendered template
         return($strContent);
