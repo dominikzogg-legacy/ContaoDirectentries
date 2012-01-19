@@ -242,7 +242,7 @@ class DirectEntries extends Backend
                     foreach($arrListElement['icons'] as $arrTitleAndUrl)
                     {
                         // add icon link
-                        $strHtml .= '<a style="padding-right: 2px;" title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '">';
+                        $strHtml .= '<a style="padding-right: 2px;" title="' . $arrTitleAndUrl['title'] . '" href="' . str_replace('&', '&amp;', $arrTitleAndUrl['url']) . '">';
                         $strHtml .= '<img style="margin:0; padding: 0; width: 16px; height: 16px;" src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
                         $strHtml .= '</a>';
                     }
@@ -251,7 +251,7 @@ class DirectEntries extends Backend
                 if(isset($arrListElement['name']) && is_array($arrListElement['name']))
                 {
                     // add name link
-                    $strHtml .= '<a title="' . $arrListElement['name']['title'] . '" href="' . $arrListElement['name']['url'] . '">';
+                    $strHtml .= '<a title="' . $arrListElement['name']['title'] . '" href="' . str_replace('&', '&amp;', $arrListElement['name']['url']) . '">';
                     $strHtml .= $arrListElement['name']['link'];
                     $strHtml .= '</a>';
                 }
