@@ -305,18 +305,32 @@ class DirectEntries extends Backend
      * @param string $strToElement for example themes
      * @param string $strToAdd html to add
      * @param string $strContent the old content
-     * @return string the new content
      */
     protected function _addContent($strToGroup, $strToElement, $strToAdd, $strContent)
     {
-        return
-        (
-            preg_replace
-            (
-                '/(\<li.*?id="' . $strToGroup .'".*?\>[\S\s]*?\<ul.*?\>[\S\s]*?\<li.*?\>[\S\s]*?\<a.*?' . $strToElement . '[\S\s]*?\>.*?\<\/a\>)([\S\s]*?\<\/li\>[\S\s]*?\<\/ul\>[\S\s]*?\<\/li\>)/',
-                '${1}' . $strToAdd . '${2}',
-                $strContent
-            )
-        );
+        // only do something if theres xml to add
+        if($strToAdd != '')
+        {
+            // prepare to add dom element
+            $objToAddDOMElement = $this->_dom->createDocumentFragment();
+            $objToAddDOMElement->appendXML($strToAdd);
+
+            // get the full backend navigation
+            $objNavigation = $this->_dom->getElementById('tl_navigation');
+
+            // get the linkgroup
+            $objLinkGroup = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objNavigation);
+
+            // go through the linkgroup
+            foreach($objLinkGroup as $objLink)
+            {
+                //search for the one to modify
+                if(strpos($objLink->getAttribute('class'), $strToElement) !== false)
+                {
+                    // append new child
+                    $objLink->parentNode->appendChild($objToAddDOMElement);
+                }
+            }
+        }
     }
 }
