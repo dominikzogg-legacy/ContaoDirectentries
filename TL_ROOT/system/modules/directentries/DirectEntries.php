@@ -105,6 +105,25 @@ class DirectEntries extends Backend
     }
 
     /**
+     * _prepareDOM
+     * @param str $strContent rendered template
+     */
+    protected function _prepareDOM($strContent)
+    {
+        // create new dom object
+        $this->_dom = new DOMDocument();
+
+        // force dtd check
+        $this->_dom->validateOnParse = true;
+
+        // load html and for encoding
+        $this->_dom->loadHTML('<?xml encoding="UTF-8">' . $strContent);
+
+        // create new dom xpath object
+        $this->_domxpath = new DOMXPath($this->_dom);
+    }
+
+    /**
      * _prepareThemesArray
      * @return boolean|array the theme array
      */
