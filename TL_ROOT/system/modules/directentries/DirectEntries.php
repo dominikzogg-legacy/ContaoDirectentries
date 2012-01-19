@@ -29,6 +29,16 @@
 class DirectEntries extends Backend
 {
     /**
+     * @var object the rendered html as dom object
+     */
+    protected $_dom;
+
+    /**
+     * @var object the xpath
+     */
+    protected $_domxpath;
+
+    /**
      * __construct
      */
     public function __construct()
