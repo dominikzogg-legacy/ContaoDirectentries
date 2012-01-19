@@ -76,6 +76,10 @@ class DirectEntries extends Backend
         {
             // start time tracking
             $floatStartTime = microtime(true);
+
+            // prepare DOM
+            $this->_prepareDOM($strContent);
+
             // get config
             $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
 
@@ -101,6 +105,9 @@ class DirectEntries extends Backend
                     $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $strNavigationElementHtml, $strContent);
                 }
             }
+
+            // get html from dom object
+            $strContent = $this->_dom->saveHTML();
 
             // stop time tracking
             $floatStopTime = microtime(true);
