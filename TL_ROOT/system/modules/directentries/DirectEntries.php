@@ -316,7 +316,7 @@ class DirectEntries extends Backend
      * _addContent
      * @param string $strToGroup for example design
      * @param string $strToElement for example themes
-     * @param string $strToAdd html to add
+     * @param string $objToAddDomElement dom element to add
      */
     protected function _addContent($strToGroup, $strToElement, $objToAddDomElement)
     {
