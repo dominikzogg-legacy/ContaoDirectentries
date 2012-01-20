@@ -77,8 +77,8 @@ class DirectEntries extends Backend
             // start time tracking
             $floatStartTime = microtime(true);
 
-            // prepare DOM
-            $this->_prepareDOM($strContent);
+            // prepare Dom
+            $this->_prepareDom($strContent);
 
             // get config
             $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
@@ -98,11 +98,11 @@ class DirectEntries extends Backend
                     // build array
                     $arrNavigationElement = $this->$strMethodName();
 
-                    // build html
-                    $strNavigationElementHtml = $this->_buildHtml($arrNavigationElement);
+                    // dom object
+                    $objToAddDomElement = $this->_buildHtml($arrNavigationElement);
 
                     // add html to content
-                    $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $strNavigationElementHtml, $strContent);
+                    $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $objToAddDomElement);
                 }
             }
 
@@ -120,10 +120,10 @@ class DirectEntries extends Backend
     }
 
     /**
-     * _prepareDOM
+     * _prepareDom
      * @param str $strContent rendered template
      */
-    protected function _prepareDOM($strContent)
+    protected function _prepareDom($strContent)
     {
         // create new dom object
         $this->_dom = new DOMDocument();
@@ -250,24 +250,22 @@ class DirectEntries extends Backend
     /**
      * _buildHtml
      * @param boolean|array $arrPreparedArray the array to build html from
-     * @return string html
+     * @return boolean|object dom
      */
     protected function _buildHtml($arrPreparedArray)
     {
-        // html string
-        $strHtml = '';
-
         // if the input is an array
         if(is_array($arrPreparedArray))
         {
-            // add list open tag
-            $strHtml .= '<ul>';
+            // list
+            $objDomList = $this->_dom->createElement('ul');
 
-            // forech list element
+            //foreach list element
             foreach($arrPreparedArray as $arrListElement)
             {
-                // add list element open tag
-                $strHtml .= '<li style="padding-left: 15px;">';
+                // list element
+                $objDomListElement = $this->_dom->createElement('li');
+                $objDomListElement->setAttribute('style', 'padding-left: 15px;');
 
                 // check for icons
                 if(isset($arrListElement['icons']) && is_array($arrListElement['icons']))
@@ -275,28 +273,43 @@ class DirectEntries extends Backend
                     // foreach icon
                     foreach($arrListElement['icons'] as $arrTitleAndUrl)
                     {
+                        // add icon
+                        $objDomIcon = $this->_dom->createElement('img');
+                        $objDomIcon->setAttribute('style', 'margin:0; padding: 0; width: 16px; height: 16px;');
+                        $objDomIcon->setAttribute('src', 'system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif');
+                        $objDomIcon->setAttribute('alt', $arrTitleAndUrl['title']);
+
                         // add icon link
-                        $strHtml .= '<a style="padding-right: 2px;" title="' . $arrTitleAndUrl['title'] . '" href="' . str_replace('&', '&amp;', $arrTitleAndUrl['url']) . '">';
-                        $strHtml .= '<img style="margin:0; padding: 0; width: 16px; height: 16px;" src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
-                        $strHtml .= '</a>';
+                        $objDomLink = $this->_dom->createElement('a');
+                        $objDomLink->setAttribute('style', 'padding-right: 2px');
+                        $objDomLink->setAttribute('title', $arrTitleAndUrl['title']);
+                        $objDomLink->setAttribute('href', $arrTitleAndUrl['url']);
+
+                        // add icon to link
+                        $objDomLink->appendChild($objDomIcon);
+
+                        // add link to list element
+                        $objDomListElement->appendChild($objDomLink);
                     }
                 }
                 // check for name
                 if(isset($arrListElement['name']) && is_array($arrListElement['name']))
                 {
                     // add name link
-                    $strHtml .= '<a title="' . $arrListElement['name']['title'] . '" href="' . str_replace('&', '&amp;', $arrListElement['name']['url']) . '">';
-                    $strHtml .= $arrListElement['name']['link'];
-                    $strHtml .= '</a>';
+                    $objDomLink = $this->_dom->createElement('a', $arrListElement['name']['link']);
+                    $objDomLink->setAttribute('title', $arrListElement['name']['title']);
+                    $objDomLink->setAttribute('href', $arrListElement['name']['url']);
+
+                    // add link to list element
+                    $objDomListElement->appendChild($objDomLink);
                 }
-                // add list element close tag
-                $strHtml .= '</li>';
+                // add list element to list
+                $objDomList->appendChild($objDomListElement);
             }
-            // add list close tag
-            $strHtml .= '</ul>';
+            // return dom element
+            return($objDomList);
         }
-        // return html
-        return $strHtml;
+        return(false);
     }
 
     /**
@@ -304,17 +317,12 @@ class DirectEntries extends Backend
      * @param string $strToGroup for example design
      * @param string $strToElement for example themes
      * @param string $strToAdd html to add
-     * @param string $strContent the old content
      */
-    protected function _addContent($strToGroup, $strToElement, $strToAdd, $strContent)
+    protected function _addContent($strToGroup, $strToElement, $objToAddDomElement)
     {
         // only do something if theres xml to add
-        if($strToAdd != '')
+        if(is_object($objToAddDomElement))
         {
-            // prepare to add dom element
-            $objToAddDOMElement = $this->_dom->createDocumentFragment();
-            $objToAddDOMElement->appendXML($strToAdd);
-
             // get the full backend navigation
             $objNavigation = $this->_dom->getElementById('tl_navigation');
 
@@ -328,7 +336,7 @@ class DirectEntries extends Backend
                 if(strpos($objLink->getAttribute('class'), $strToElement) !== false)
                 {
                     // append new child
-                    $objLink->parentNode->appendChild($objToAddDOMElement);
+                    $objLink->parentNode->appendChild($objToAddDomElement);
                 }
             }
         }
