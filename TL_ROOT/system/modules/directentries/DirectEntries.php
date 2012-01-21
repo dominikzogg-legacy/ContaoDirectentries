@@ -132,7 +132,7 @@ class DirectEntries extends Backend
         $this->_dom->validateOnParse = true;
 
         // load html and for encoding
-        $this->_dom->loadHTML('<?xml encoding="UTF-8">' . $strContent);
+        @$this->_dom->loadHTML('<?xml encoding="UTF-8">' . $strContent);
 
         // create new dom xpath object
         $this->_domxpath = new DOMXPath($this->_dom);
