@@ -280,13 +280,13 @@ class DirectEntries extends Backend
         {
             // list
             $objDomList = $this->_dom->createElement('ul');
+            $objDomList->setAttribute('class', 'tl_level_3');
 
             //foreach list element
             foreach($arrPreparedArray as $arrListElement)
             {
                 // list element
                 $objDomListElement = $this->_dom->createElement('li');
-                $objDomListElement->setAttribute('style', 'padding-left: 15px;');
 
                 // check for icons
                 if(isset($arrListElement['icons']) && is_array($arrListElement['icons']))
@@ -296,13 +296,11 @@ class DirectEntries extends Backend
                     {
                         // add icon
                         $objDomIcon = $this->_dom->createElement('img');
-                        $objDomIcon->setAttribute('style', 'margin:0; padding: 0; width: 16px; height: 16px;');
                         $objDomIcon->setAttribute('src', 'system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif');
                         $objDomIcon->setAttribute('alt', $arrTitleAndUrl['title']);
 
                         // add icon link
                         $objDomLink = $this->_dom->createElement('a');
-                        $objDomLink->setAttribute('style', 'padding-right: 2px');
                         $objDomLink->setAttribute('title', $arrTitleAndUrl['title']);
                         $objDomLink->setAttribute('href', $arrTitleAndUrl['url']);
 
