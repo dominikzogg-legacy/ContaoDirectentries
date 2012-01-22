@@ -128,14 +128,17 @@ class DirectEntries extends Backend
      */
     protected function _prepareDom($strContent)
     {
+        // force internal ml error handling
+        libxml_use_internal_errors(true);
+
         // create new dom object
-        $this->_dom = new DOMDocument();
+        $this->_dom = new DOMDocument('1.0','UTF-8');
 
         // force dtd check
         $this->_dom->validateOnParse = true;
 
         // load html and for encoding
-        @$this->_dom->loadHTML('<?xml encoding="UTF-8">' . $strContent);
+        $this->_dom->loadHTML(self::_getXmlVersion() . $strContent);
 
         // create new dom xpath object
         $this->_domxpath = new DOMXPath($this->_dom);
