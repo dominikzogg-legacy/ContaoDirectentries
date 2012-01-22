@@ -139,6 +139,24 @@ class DirectEntries extends Backend
     }
 
     /**
+     * _addCSS
+     */
+    protected function _addCSS()
+    {
+        // build css line
+        $objDomCss = $this->_dom->createElement('link');
+        $objDomCss->setAttribute('rel', 'stylesheet');
+        $objDomCss->setAttribute('media', 'all');
+        $objDomCss->setAttribute('href', 'system/modules/directentries/html/directentries.css');
+
+        // get the head section
+        $objDomHead = $this->_dom->getElementsByTagName('head')->item(0);
+
+        // add css to the head section
+        $objDomHead->appendChild($objDomCss);
+    }
+
+    /**
      * _prepareThemesArray
      * @return boolean|array the theme array
      */
