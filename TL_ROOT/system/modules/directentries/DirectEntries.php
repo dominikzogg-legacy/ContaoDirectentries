@@ -80,6 +80,9 @@ class DirectEntries extends Backend
             // prepare Dom
             $this->_prepareDom($strContent);
 
+            // add css
+            $this->_addCSS();
+
             // get config
             $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
 
@@ -277,13 +280,13 @@ class DirectEntries extends Backend
         {
             // list
             $objDomList = $this->_dom->createElement('ul');
+            $objDomList->setAttribute('class', 'tl_level_3');
 
             //foreach list element
             foreach($arrPreparedArray as $arrListElement)
             {
                 // list element
                 $objDomListElement = $this->_dom->createElement('li');
-                $objDomListElement->setAttribute('style', 'padding-left: 15px;');
 
                 // check for icons
                 if(isset($arrListElement['icons']) && is_array($arrListElement['icons']))
@@ -293,13 +296,11 @@ class DirectEntries extends Backend
                     {
                         // add icon
                         $objDomIcon = $this->_dom->createElement('img');
-                        $objDomIcon->setAttribute('style', 'margin:0; padding: 0; width: 16px; height: 16px;');
                         $objDomIcon->setAttribute('src', 'system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif');
                         $objDomIcon->setAttribute('alt', $arrTitleAndUrl['title']);
 
                         // add icon link
                         $objDomLink = $this->_dom->createElement('a');
-                        $objDomLink->setAttribute('style', 'padding-right: 2px');
                         $objDomLink->setAttribute('title', $arrTitleAndUrl['title']);
                         $objDomLink->setAttribute('href', $arrTitleAndUrl['url']);
 
@@ -342,19 +343,19 @@ class DirectEntries extends Backend
         if(is_object($objToAddDomElement))
         {
             // get the full backend navigation
-            $objNavigation = $this->_dom->getElementById('tl_navigation');
+            $objDomNavigation = $this->_dom->getElementById('tl_navigation');
 
             // get the linkgroup
-            $objLinkGroup = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objNavigation);
+            $objDomLinks = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objDomNavigation);
 
             // go through the linkgroup
-            foreach($objLinkGroup as $objLink)
+            foreach($objDomLinks as $objDomLink)
             {
                 //search for the one to modify
-                if(strpos($objLink->getAttribute('class'), $strToElement) !== false)
+                if(strpos($objDomLink->getAttribute('class'), $strToElement) !== false)
                 {
                     // append new child
-                    $objLink->parentNode->appendChild($objToAddDomElement);
+                    $objDomLink->parentNode->appendChild($objToAddDomElement);
                 }
             }
         }
