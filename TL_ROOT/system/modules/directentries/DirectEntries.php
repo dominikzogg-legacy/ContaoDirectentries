@@ -280,13 +280,13 @@ class DirectEntries extends Backend
         {
             // list
             $objDomList = $this->_dom->createElement('ul');
-            $objDomList->setAttribute('class', 'tl_level_3');
 
             //foreach list element
             foreach($arrPreparedArray as $arrListElement)
             {
                 // list element
                 $objDomListElement = $this->_dom->createElement('li');
+                $objDomListElement->setAttribute('style', 'padding-left: 15px;');
 
                 // check for icons
                 if(isset($arrListElement['icons']) && is_array($arrListElement['icons']))
@@ -296,11 +296,13 @@ class DirectEntries extends Backend
                     {
                         // add icon
                         $objDomIcon = $this->_dom->createElement('img');
+                        $objDomIcon->setAttribute('style', 'margin:0; padding: 0; width: 16px; height: 16px;');
                         $objDomIcon->setAttribute('src', 'system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif');
                         $objDomIcon->setAttribute('alt', $arrTitleAndUrl['title']);
 
                         // add icon link
                         $objDomLink = $this->_dom->createElement('a');
+                        $objDomLink->setAttribute('style', 'padding-right: 2px');
                         $objDomLink->setAttribute('title', $arrTitleAndUrl['title']);
                         $objDomLink->setAttribute('href', $arrTitleAndUrl['url']);
 
@@ -343,19 +345,19 @@ class DirectEntries extends Backend
         if(is_object($objToAddDomElement))
         {
             // get the full backend navigation
-            $objDomNavigation = $this->_dom->getElementById('tl_navigation');
+            $objNavigation = $this->_dom->getElementById('tl_navigation');
 
             // get the linkgroup
-            $objDomLinks = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objDomNavigation);
+            $objLinkGroup = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objNavigation);
 
             // go through the linkgroup
-            foreach($objDomLinks as $objDomLink)
+            foreach($objLinkGroup as $objLink)
             {
                 //search for the one to modify
-                if(strpos($objDomLink->getAttribute('class'), $strToElement) !== false)
+                if(strpos($objLink->getAttribute('class'), $strToElement) !== false)
                 {
                     // append new child
-                    $objDomLink->parentNode->appendChild($objToAddDomElement);
+                    $objLink->parentNode->appendChild($objToAddDomElement);
                 }
             }
         }
