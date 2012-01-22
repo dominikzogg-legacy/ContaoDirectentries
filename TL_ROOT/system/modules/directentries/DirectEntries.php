@@ -119,7 +119,7 @@ class DirectEntries extends Backend
             //die($floatStopTime - $floatStartTime);
         }
         // return rendered template
-        return($strContent);
+        return(str_replace(self::_getXmlVersion(), '', $strContent));
     }
 
     /**
@@ -139,6 +139,15 @@ class DirectEntries extends Backend
 
         // create new dom xpath object
         $this->_domxpath = new DOMXPath($this->_dom);
+    }
+
+    /**
+     * _getXmlVersion
+     * @return string xml version
+     */
+    protected static function _getXmlVersion()
+    {
+        return('<?xml version="1.0" encoding="UTF-8" ?>');
     }
 
     /**
