@@ -343,19 +343,19 @@ class DirectEntries extends Backend
         if(is_object($objToAddDomElement))
         {
             // get the full backend navigation
-            $objNavigation = $this->_dom->getElementById('tl_navigation');
+            $objDomNavigation = $this->_dom->getElementById('tl_navigation');
 
             // get the linkgroup
-            $objLinkGroup = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objNavigation);
+            $objDomLinks = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objDomNavigation);
 
             // go through the linkgroup
-            foreach($objLinkGroup as $objLink)
+            foreach($objDomLinks as $objDomLink)
             {
                 //search for the one to modify
-                if(strpos($objLink->getAttribute('class'), $strToElement) !== false)
+                if(strpos($objDomLink->getAttribute('class'), $strToElement) !== false)
                 {
                     // append new child
-                    $objLink->parentNode->appendChild($objToAddDomElement);
+                    $objDomLink->parentNode->appendChild($objToAddDomElement);
                 }
             }
         }
