@@ -29,16 +29,6 @@
 class DirectEntries extends Backend
 {
     /**
-     * @var object the rendered html as dom object
-     */
-    protected $_dom;
-
-    /**
-     * @var object the xpath
-     */
-    protected $_domxpath;
-
-    /**
      * __construct
      */
     public function __construct()
@@ -61,11 +51,8 @@ class DirectEntries extends Backend
             // start time tracking
             $floatStartTime = microtime(true);
 
-            // prepare Dom
-            $this->_prepareDom($strContent);
-
             // add css
-            $this->_addCSS();
+            $strContent = $this->_addCSS('system/modules/directentries/html/directentries.css', $strContent);
 
             // get config
             $arrInactiveDirectEntries = isset($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) && is_array(unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries'])) ? unserialize($GLOBALS['TL_CONFIG']['inactiveDirectEntries']) : array();
@@ -85,17 +72,13 @@ class DirectEntries extends Backend
                     // build array
                     $arrNavigationElement = $this->$strMethodName();
 
-                    // dom object
-                    $objToAddDomElement = $this->_buildHtml($arrNavigationElement);
+                    // html to add
+                    $strToAddHtml = $this->_buildHtml($arrNavigationElement);
 
                     // add html to content
-                    $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $objToAddDomElement);
+                    $strContent = $this->_addContent($arrGroupAndNavigationKey[0], $arrGroupAndNavigationKey[1], $strToAddHtml, $strContent);
                 }
             }
-
-            // get html from dom object
-            $strContent = $this->_dom->saveHTML();
-
             // stop time tracking
             $floatStopTime = microtime(true);
 
@@ -103,56 +86,7 @@ class DirectEntries extends Backend
             //die($floatStopTime - $floatStartTime);
         }
         // return rendered template
-        return(str_replace(self::_getXmlVersion(), '', $strContent));
-    }
-
-    /**
-     * _prepareDom
-     * @param str $strContent rendered template
-     */
-    protected function _prepareDom($strContent)
-    {
-        // force internal ml error handling
-        libxml_use_internal_errors(true);
-
-        // create new dom object
-        $this->_dom = new DOMDocument('1.0','UTF-8');
-
-        // force dtd check
-        $this->_dom->validateOnParse = true;
-
-        // load html and for encoding
-        $this->_dom->loadHTML(self::_getXmlVersion() . $strContent);
-
-        // create new dom xpath object
-        $this->_domxpath = new DOMXPath($this->_dom);
-    }
-
-    /**
-     * _getXmlVersion
-     * @return string xml version
-     */
-    protected static function _getXmlVersion()
-    {
-        return('<?xml version="1.0" encoding="UTF-8" ?>');
-    }
-
-    /**
-     * _addCSS
-     */
-    protected function _addCSS()
-    {
-        // build css line
-        $objDomCss = $this->_dom->createElement('link');
-        $objDomCss->setAttribute('rel', 'stylesheet');
-        $objDomCss->setAttribute('media', 'all');
-        $objDomCss->setAttribute('href', 'system/modules/directentries/html/directentries.css');
-
-        // get the head section
-        $objDomHead = $this->_dom->getElementsByTagName('head')->item(0);
-
-        // add css to the head section
-        $objDomHead->appendChild($objDomCss);
+        return($strContent);
     }
 
     /**
@@ -267,22 +201,24 @@ class DirectEntries extends Backend
     /**
      * _buildHtml
      * @param boolean|array $arrPreparedArray the array to build html from
-     * @return boolean|object dom
+     * @return string html to add
      */
     protected function _buildHtml($arrPreparedArray)
     {
+        // empty to add sting
+        $strToAdd = '';
+
         // if the input is an array
         if(is_array($arrPreparedArray))
         {
             // list
-            $objDomList = $this->_dom->createElement('ul');
-            $objDomList->setAttribute('class', 'tl_level_3');
+            $strToAdd .= '<ul class="tl_level_3">';
 
             //foreach list element
             foreach($arrPreparedArray as $arrListElement)
             {
                 // list element
-                $objDomListElement = $this->_dom->createElement('li');
+                $strToAdd .= '<li>';
 
                 // check for icons
                 if(isset($arrListElement['icons']) && is_array($arrListElement['icons']))
@@ -290,71 +226,68 @@ class DirectEntries extends Backend
                     // foreach icon
                     foreach($arrListElement['icons'] as $arrTitleAndUrl)
                     {
-                        // add icon
-                        $objDomIcon = $this->_dom->createElement('img');
-                        $objDomIcon->setAttribute('src', 'system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif');
-                        $objDomIcon->setAttribute('alt', $arrTitleAndUrl['title']);
-
                         // add icon link
-                        $objDomLink = $this->_dom->createElement('a');
-                        $objDomLink->setAttribute('title', $arrTitleAndUrl['title']);
-                        $objDomLink->setAttribute('href', $arrTitleAndUrl['url']);
+                        $strToAdd .= '<a title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '">';
 
-                        // add icon to link
-                        $objDomLink->appendChild($objDomIcon);
+                        // add icon
+                        $strToAdd .= '<img src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
 
-                        // add link to list element
-                        $objDomListElement->appendChild($objDomLink);
+                        // add icon link close
+                        $strToAdd .= '</a>';
                     }
                 }
                 // check for name
                 if(isset($arrListElement['name']) && is_array($arrListElement['name']))
                 {
                     // add name link
-                    $objDomLink = $this->_dom->createElement('a', $arrListElement['name']['link']);
-                    $objDomLink->setAttribute('title', $arrListElement['name']['title']);
-                    $objDomLink->setAttribute('href', $arrListElement['name']['url']);
-
-                    // add link to list element
-                    $objDomListElement->appendChild($objDomLink);
+                    $strToAdd .= '<a title="' . $arrListElement['name']['title'] . '" href="' . $arrListElement['name']['url'] . '">' . $arrListElement['name']['link'] . '</a>';
                 }
-                // add list element to list
-                $objDomList->appendChild($objDomListElement);
+                // list element close
+                $strToAdd .= '</li>';
             }
-            // return dom element
-            return($objDomList);
+            // list close
+            $strToAdd .= '</ul>';
         }
-        return(false);
+        // return
+        return($strToAdd);
+    }
+
+    /**
+     * _addCSS
+     * @param string $strCssPath the path to the css
+     * @param string $strContent content
+     * @return string modified content
+     */
+    protected function _addCSS($strCssPath, $strContent)
+    {
+        // css link line
+        $strCSSLinkLine = '<link rel="stylesheet" href="' . $strCssPath . '" media="all">';
+
+        // add css to head
+        $strContent = preg_replace('/\<\/head\>/', "{$strCSSLinkLine}\n</head>", $strContent);
+
+        // return modified content
+        return($strContent);
     }
 
     /**
      * _addContent
      * @param string $strToGroup for example design
      * @param string $strToElement for example themes
-     * @param string $objToAddDomElement dom element to add
+     * @param string $strToAdd html to add
+     * @param string $strContent content
+     * @return string modified content
      */
-    protected function _addContent($strToGroup, $strToElement, $objToAddDomElement)
+    protected function _addContent($strToGroup, $strToElement, $strToAddHtml, $strContent)
     {
-        // only do something if theres xml to add
-        if(is_object($objToAddDomElement))
-        {
-            // get the full backend navigation
-            $objDomNavigation = $this->_dom->getElementById('tl_navigation');
+        // regular expression pattern
+        $strPattern = '/(id\="tl_navigation"[\s\S]*?id\="' . $strToGroup . '"[\s\S]*?class\=".*?' . $strToElement . '.*?a\>)/';
 
-            // get the linkgroup
-            $objDomLinks = $this->_domxpath->query('ul/li[@id="' . $strToGroup . '"]/ul/li/a', $objDomNavigation);
+        // add html after thw wished link
+        $strContent = preg_replace($strPattern, '${1}' . $strToAddHtml, $strContent);
 
-            // go through the linkgroup
-            foreach($objDomLinks as $objDomLink)
-            {
-                //search for the one to modify
-                if(strpos($objDomLink->getAttribute('class'), $strToElement) !== false)
-                {
-                    // append new child
-                    $objDomLink->parentNode->appendChild($objToAddDomElement);
-                }
-            }
-        }
+        // return modified content
+        return($strContent);
     }
 
     /**
