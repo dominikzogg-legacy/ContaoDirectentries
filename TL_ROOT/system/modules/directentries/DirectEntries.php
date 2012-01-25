@@ -49,22 +49,6 @@ class DirectEntries extends Backend
     }
 
     /**
-     * getDirectEntries
-     * @return array the directentries
-     */
-    public static function getDirectEntries()
-    {
-        return
-        (
-            array
-            (
-                'design_themes'  => &$GLOBALS['TL_LANG']['MOD']['themes'][0],
-                'design_page' => &$GLOBALS['TL_LANG']['MOD']['page'][0],
-            )
-        );
-    }
-
-    /**
      * inject
      * @param str $strContent rendered template
      * @param str $strTemplate template name
@@ -372,4 +356,21 @@ class DirectEntries extends Backend
             }
         }
     }
+
+    /**
+     * getDirectEntries
+     * @return array the directentries
+     */
+    public static function getDirectEntries()
+    {
+        return
+        (
+            array
+            (
+                'design_themes'  => &$GLOBALS['TL_LANG']['MOD']['themes'][0],
+                'design_page' => &$GLOBALS['TL_LANG']['MOD']['page'][0],
+            )
+        );
+    }
+
 }
