@@ -26,4 +26,6 @@
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
 
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('DirectEntries','inject');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('DirectEntryThemes','prepare');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('DirectEntryPage','prepare');
+$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('DirectEntries','inject');
