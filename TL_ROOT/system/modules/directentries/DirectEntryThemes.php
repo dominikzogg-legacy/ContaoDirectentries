@@ -33,13 +33,15 @@ class DirectEntryThemes extends Backend
      */
     public function prepare()
     {
-        // load libraries
-        $this->import("Database");
+        // load backenduser
         $this->import('BackendUser', 'User');
 
         // check permission
         if($this->User->isAdmin || $this->User->hasAccess('themes', 'modules'))
         {
+            // load database
+            $this->import("Database");
+
             // get all existing themes
             $objThemes = $this->Database->query("SELECT id,name FROM tl_theme ORDER BY name");
 

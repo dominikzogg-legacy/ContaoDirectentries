@@ -33,13 +33,15 @@ class DirectEntryPage extends Backend
      */
     public function prepare()
     {
-        // load libraries
-        $this->import("Database");
+        // load backend user
         $this->import('BackendUser', 'User');
 
         // check permission
         if($this->User->isAdmin || $this->User->hasAccess('page', 'modules'))
         {
+            // load database
+            $this->import("Database");
+
             // get all existing root pages
             $objPages = $this->Database->query("SELECT * FROM tl_page WHERE type = 'root' ORDER BY title");
 
