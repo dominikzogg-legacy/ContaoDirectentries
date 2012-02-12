@@ -37,7 +37,7 @@ class DirectEntryPage extends Backend
         $this->import('BackendUser', 'User');
 
         // check permission
-        if($this->User->isAdmin || $this->User->hasAccess('page', 'modules'))
+        if($this->User->isAdmin || ($this->User->hasAccess('page', 'modules') && isset($this->User->pagemounts) && is_array($this->User->pagemounts)))
         {
             // load database
             $this->import("Database");
@@ -58,7 +58,7 @@ class DirectEntryPage extends Backend
                 while($objPages->next())
                 {
                     // check page permission
-                    if($this->User->isAdmin || $this->User->isAllowed(1, $objPages->row()))
+                    if($this->User->isAdmin || in_array($objPages->id, $this->User->pagemounts))
                     {
                         // set the icon url and title
                         $arrDirectEntry[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=page&node=' . $objPages->id;
