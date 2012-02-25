@@ -193,8 +193,16 @@ class DirectEntries
                         // add icon link
                         $strToAdd .= '<a title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '">';
 
-                        // add icon
-                        $strToAdd .= '<img src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
+                        // add icon if there is no path given
+                        if(strpos($arrTitleAndUrl['icon'], '/') === false)
+                        {
+                            $strToAdd .= '<img src="system/themes/default/images/' . $arrTitleAndUrl['icon'] . '.gif" alt="' . $arrTitleAndUrl['title'] . '" />';
+                        }
+                        // add image with full path
+                        else
+                        {
+                            $strToAdd .= '<img src="' . $arrTitleAndUrl['icon'] . '" alt="' . $arrTitleAndUrl['title'] . '" />';
+                        }
 
                         // add icon link close
                         $strToAdd .= '</a>';
