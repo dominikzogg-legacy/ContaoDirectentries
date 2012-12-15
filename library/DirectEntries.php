@@ -182,7 +182,7 @@ class DirectEntries
                     foreach($arrListElement['icons'] as $arrTitleAndUrl)
                     {
                         // add icon link
-                        $strToAdd .= '<a title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '">';
+                        $strToAdd .= '<a title="' . $arrTitleAndUrl['title'] . '" href="' . $arrTitleAndUrl['url'] . '&amp;rt=' . REQUEST_TOKEN . '">';
 
                         // add icon if there is no path given
                         if(strpos($arrTitleAndUrl['icon'], '/') === false)
@@ -203,7 +203,7 @@ class DirectEntries
                 if(isset($arrListElement['name']) && is_array($arrListElement['name']))
                 {
                     // add name link
-                    $strToAdd .= '<a title="' . $arrListElement['name']['title'] . '" href="' . $arrListElement['name']['url'] . '">' . $arrListElement['name']['link'] . '</a>';
+                    $strToAdd .= '<a title="' . $arrListElement['name']['title'] . '" href="' . $arrListElement['name']['url'] . '&amp;rt=' . REQUEST_TOKEN . '">' . $arrListElement['name']['link'] . '</a>';
                 }
                 // list element close
                 $strToAdd .= '</li>';
