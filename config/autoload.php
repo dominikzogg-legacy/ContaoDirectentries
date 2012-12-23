@@ -30,6 +30,7 @@ ClassLoader::addClasses(array
     'DominikZogg\DirectEntries\DirectEntryArticle'      => 'system/modules/directentries/classes/DirectEntryArticle.php',
     'DominikZogg\DirectEntries\DirectEntryCalendar'     => 'system/modules/directentries/classes/DirectEntryCalendar.php',
     'DominikZogg\DirectEntries\DirectEntryFaq'          => 'system/modules/directentries/classes/DirectEntryFaq.php',
+    'DominikZogg\DirectEntries\DirectEntryForm'         => 'system/modules/directentries/classes/DirectEntryForm.php',
     'DominikZogg\DirectEntries\DirectEntryNews'         => 'system/modules/directentries/classes/DirectEntryNews.php',
     'DominikZogg\DirectEntries\DirectEntryPage'         => 'system/modules/directentries/classes/DirectEntryPage.php',
     'DominikZogg\DirectEntries\DirectEntryThemes'       => 'system/modules/directentries/classes/DirectEntryThemes.php',
