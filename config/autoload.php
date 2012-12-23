@@ -27,6 +27,7 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
     // Classes
+    'DominikZogg\DirectEntries\DirectEntryArticle'      => 'system/modules/directentries/classes/DirectEntryArticle.php',
     'DominikZogg\DirectEntries\DirectEntryCalendar'     => 'system/modules/directentries/classes/DirectEntryCalendar.php',
     'DominikZogg\DirectEntries\DirectEntryFaq'          => 'system/modules/directentries/classes/DirectEntryFaq.php',
     'DominikZogg\DirectEntries\DirectEntryNews'         => 'system/modules/directentries/classes/DirectEntryNews.php',

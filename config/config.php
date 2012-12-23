@@ -28,6 +28,7 @@
 
  if(TL_MODE == 'BE')
 {
+    $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryArticle','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryNews','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryCalendar','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryFaq','prepare');
