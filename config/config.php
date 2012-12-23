@@ -34,6 +34,7 @@
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryFaq','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryThemes','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryForm','prepare');
+    $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryNewsletter','prepare');
     $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array('DirectEntryPage','prepare');
     $GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('DirectEntries','inject');
 }
