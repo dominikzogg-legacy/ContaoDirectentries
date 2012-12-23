@@ -38,14 +38,13 @@ class DirectEntries
     protected $_arrDirectEntries = array();
 
     /**
-     * instance
-     * @var object  current object instance (Singleton)
+     * @var DirectEntries
      */
     protected static $objInstance;
 
     /**
      * Return the current object instance (Singleton)
-     * @return Session
+     * @return DirectEntries
      */
     public static function getInstance()
     {
@@ -213,15 +212,6 @@ class DirectEntries
         }
         // return
         return($strToAdd);
-    }
-
-    /**
-     * resetCSSPath
-     * @param string $strNewPath an alternate path to the css to load
-     */
-    public function resetCSSPath($strNewPath)
-    {
-        $this->_strCssPath = $strNewPath;
     }
 
     /**
