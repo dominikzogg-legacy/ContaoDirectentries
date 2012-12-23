@@ -33,14 +33,11 @@ class DirectEntryCalendar extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('calendar', 'modules') && isset($this->User->calendars) && is_array($this->User->calendars)))
             {
-                // load database
-                $this->import("Database");
-
                 // get all existing root pages
-                $objCalendar = $this->Database->query("SELECT id,title FROM tl_calendar ORDER BY title");
+                $objCalendar = \CalendarModel::findAll(array('order' => 'title'));
 
                 // there are at minimumone archiv
-                if($objCalendar->numRows)
+                if(!is_null($objCalendar) && $objCalendar->count())
                 {
                     // prepare directentry array
                     $arrDirectEntry = array();
@@ -57,7 +54,7 @@ class DirectEntryCalendar extends \Backend
                             // set the icon url and title
                             $arrDirectEntry[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=calendar&table=tl_calendar_events&id=' . $objCalendar->id;
                             $arrDirectEntry[$intCounter]['icons']['page']['title'] = 'calendar';
-                            $arrDirectEntry[$intCounter]['icons']['page']['icon'] = 'system/modules/calendar/html/icon.gif';
+                            $arrDirectEntry[$intCounter]['icons']['page']['icon'] = 'system/modules/calendar/assets/icon.gif';
 
                             // set the page url and title
                             $arrDirectEntry[$intCounter]['name']['url'] = 'contao/main.php?do=calendar&table=tl_calendar_events&id=' . $objCalendar->id;

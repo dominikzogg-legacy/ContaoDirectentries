@@ -33,14 +33,11 @@ class DirectEntryNews extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('news', 'modules') && isset($this->User->news) && is_array($this->User->news)))
             {
-                // load database
-                $this->import("Database");
+                // get all news archives
+                $objNews = \NewsArchiveModel::findAll(array('order' => 'title'));
 
-                // get all existing root pages
-                $objNews = $this->Database->query("SELECT * FROM tl_news_archive ORDER BY title");
-
-                // there are at minimumone archiv
-                if($objNews->numRows)
+                // there are at minimum one archiv
+                if(!is_null($objNews) && $objNews->count())
                 {
                     // prepare directentry array
                     $arrDirectEntry = array();

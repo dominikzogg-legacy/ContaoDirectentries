@@ -33,14 +33,11 @@ class DirectEntryFaq extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('faq', 'modules') && isset($this->User->faqs) && is_array($this->User->faqs)))
             {
-                // load database
-                $this->import("Database");
+                // get all faq categories
+                $objFaq = \FaqCategoryModel::findAll(array('order' => 'title'));
 
-                // get all existing root pages
-                $objFaq = $this->Database->query("SELECT * FROM tl_faq_category ORDER BY title");
-
-                // there are at minimumone archiv
-                if($objFaq->numRows)
+                // there are at minimum one faq category
+                if(!is_null($objFaq) && $objFaq->count())
                 {
                     // prepare directentry array
                     $arrDirectEntry = array();
@@ -57,7 +54,7 @@ class DirectEntryFaq extends \Backend
                             // set the icon url and title
                             $arrDirectEntry[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=faq&table=tl_faq&id=' . $objFaq->id;
                             $arrDirectEntry[$intCounter]['icons']['page']['title'] = 'faq';
-                            $arrDirectEntry[$intCounter]['icons']['page']['icon'] = 'system/modules/faq/html/icon.gif';
+                            $arrDirectEntry[$intCounter]['icons']['page']['icon'] = 'system/modules/faq/assets/icon.gif';
 
                             // set the page url and title
                             $arrDirectEntry[$intCounter]['name']['url'] = 'contao/main.php?do=faq&table=tl_faq&id=' . $objFaq->id;

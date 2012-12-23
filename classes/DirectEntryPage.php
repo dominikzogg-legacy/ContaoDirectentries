@@ -30,14 +30,11 @@ class DirectEntryPage extends \Backend
         // check permission
         if($this->User->isAdmin || ($this->User->hasAccess('page', 'modules') && isset($this->User->pagemounts) && is_array($this->User->pagemounts)))
         {
-            // load database
-            $this->import("Database");
-
             // get all existing root pages
-            $objPages = $this->Database->query("SELECT * FROM tl_page WHERE type = 'root' ORDER BY title");
+            $objPages = \PageModel::findBy('type', 'root', array('order' => 'title'));
 
             // there are at minimum two pages
-            if($objPages->numRows > 1)
+            if(!is_null($objPages) && $objPages->count() > 1)
             {
                 // prepare directentry array
                 $arrDirectEntry = array();
