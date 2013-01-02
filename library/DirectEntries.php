@@ -29,7 +29,7 @@ class DirectEntries
      * csspath
      * @var string path to the css
      */
-    protected $_strCssPath = 'system/modules/directentries/html/directentries.css';
+    protected $_strCssPath = 'system/modules/directentries/assets/directentries.css';
 
     /**
      * directentries
