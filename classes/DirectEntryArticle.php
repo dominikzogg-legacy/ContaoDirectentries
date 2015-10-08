@@ -30,6 +30,9 @@ class DirectEntryArticle extends \Backend
         // check permission
         if($this->User->isAdmin || ($this->User->hasAccess('article', 'modules') && isset($this->User->pagemounts) && is_array($this->User->pagemounts)))
         {
+            // check if table exists
+            if (!$this->Database->tableExists('tl_article')) return;
+
             // get all existing root pages
             $objPages = \PageModel::findBy('type', 'root', array('order' => 'title'));
 

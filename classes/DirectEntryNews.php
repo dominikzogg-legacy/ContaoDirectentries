@@ -33,6 +33,9 @@ class DirectEntryNews extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('news', 'modules') && isset($this->User->news) && is_array($this->User->news)))
             {
+                // check if table exists
+                if (!$this->Database->tableExists('tl_news')) return;
+
                 // get all news archives
                 $objNews = \NewsArchiveModel::findAll(array('order' => 'title'));
 

@@ -33,6 +33,9 @@ class DirectEntryFaq extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('faq', 'modules') && isset($this->User->faqs) && is_array($this->User->faqs)))
             {
+                // check if table exists
+                if (!$this->Database->tableExists('tl_faq')) return;
+
                 // get all faq categories
                 $objFaq = \FaqCategoryModel::findAll(array('order' => 'title'));
 
