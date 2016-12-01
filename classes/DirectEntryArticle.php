@@ -51,13 +51,27 @@ class DirectEntryArticle extends \Backend
                     // check page permission
                     if($this->User->isAdmin || in_array($objPages->id, $this->User->pagemounts))
                     {
+                        if(version_compare(VERSION, '3.5', '<'))
+                        {
+                            $strQuery = http_build_query([
+                                'do'   => 'article',
+                                'node' => $objPages->id,
+                            ]);
+                        } else {
+                            $strQuery = http_build_query([
+                                'do'   => 'article',
+                                'node' => $objPages->id,
+                                'pn'   => $objPages->id,
+                            ]);
+                        }
+
                         // set the icon url and title
-                        $arrDirectEntry[$intCounter]['icons']['page']['url'] = 'contao/main.php?do=article&node=' . $objPages->id;
+                        $arrDirectEntry[$intCounter]['icons']['page']['url'] = 'contao/main.php?' . $strQuery;
                         $arrDirectEntry[$intCounter]['icons']['page']['title'] = 'page';
                         $arrDirectEntry[$intCounter]['icons']['page']['icon'] = 'article';
 
                         // set the page url and title
-                        $arrDirectEntry[$intCounter]['name']['url'] = 'contao/main.php?do=article&node=' . $objPages->id;
+                        $arrDirectEntry[$intCounter]['name']['url'] = 'contao/main.php?' . $strQuery;
                         $arrDirectEntry[$intCounter]['name']['title'] = $objPages->title;
                         $arrDirectEntry[$intCounter]['name']['link'] = strlen($objPages->title) > 17 ? substr($objPages->title, 0, 15) . '...' : $objPages->title;
 
