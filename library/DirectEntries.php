@@ -235,7 +235,7 @@ class DirectEntries
     protected function _addContent($strGroup, $strItem, $strPreparedDirectEntry)
     {
         // regular expression pattern
-        $strPattern = '/(id\="tl_navigation"[\s\S]*?id\="' . $strGroup . '"[\s\S]*?class\=".*?' . $strItem . '.*?a\>)/';
+        $strPattern = '/(id\="tl_navigation"[\s\S]*?id\="' . $strGroup . '"[\s\S]*?class\="[^"]*?' . $strItem . '.*?a\>)/';
 
         // add html after thw wished link
         $this->_strContent = preg_replace($strPattern, '${1}' . $strPreparedDirectEntry, $this->_strContent);

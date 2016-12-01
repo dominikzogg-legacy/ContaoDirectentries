@@ -33,6 +33,9 @@ class DirectEntryNewsletter extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('newsletter', 'modules') && isset($this->User->newsletters) && is_array($this->User->newsletters)))
             {
+                // check if table exists
+                if (!$this->Database->tableExists('tl_newsletter')) return;
+
                 // get all newsletter channels
                 $objNewsletter = \NewsletterChannelModel::findAll(array('order' => 'title'));
 

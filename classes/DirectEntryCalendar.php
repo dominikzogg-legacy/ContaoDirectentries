@@ -33,6 +33,9 @@ class DirectEntryCalendar extends \Backend
             // check permission
             if($this->User->isAdmin || ($this->User->hasAccess('calendar', 'modules') && isset($this->User->calendars) && is_array($this->User->calendars)))
             {
+                // check if table exists
+                if (!$this->Database->tableExists('tl_calendar')) return;
+
                 // get all existing root pages
                 $objCalendar = \CalendarModel::findAll(array('order' => 'title'));
 

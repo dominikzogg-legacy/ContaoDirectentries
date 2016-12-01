@@ -30,6 +30,9 @@ class DirectEntryForm extends \Backend
         // check permission
         if($this->User->isAdmin || ($this->User->hasAccess('form', 'modules') && isset($this->User->forms) && is_array($this->User->forms)))
         {
+            // check if table exists
+            if (!$this->Database->tableExists('tl_form')) return;
+
             // get all forms
             $objForm = \FormModel::findAll(array('order' => 'title'));
 

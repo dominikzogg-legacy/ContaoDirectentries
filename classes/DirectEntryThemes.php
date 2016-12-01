@@ -30,6 +30,9 @@ class DirectEntryThemes extends \Backend
         // check permission
         if($this->User->isAdmin || $this->User->hasAccess('themes', 'modules'))
         {
+            // check if table exists
+            if (!$this->Database->tableExists('tl_theme')) return;
+
             // get all existing themes
             $objThemes = \ThemeModel::findAll(array('order' => 'name'));
 
